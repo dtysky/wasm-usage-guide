@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+.DS_Store
+.vscode
+node_modules
+
+reports
+target
+**/*.rs.bk
+Cargo.lock
+/target/
+**/*.rs.bk
+Cargo.lock
