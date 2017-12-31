@@ -6,15 +6,8 @@
 add:                                    # @add
 	.param  	i32, i32
 	.result 	i32
-	.local  	i32
 # %bb.0:
-	i32.const	$push2=, 0
-	i32.load	$push1=, __stack_pointer($pop2)
-	i32.const	$push3=, 16
-	i32.sub 	$2=, $pop1, $pop3
-	i32.store	12($2), $0
-	i32.store	8($2), $1
-	i32.add 	$push0=, $0, $1
+	i32.add 	$push0=, $1, $0
                                         # fallthrough-return: $pop0
 	.endfunc
 .Lfunc_end0:
