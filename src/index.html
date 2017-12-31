@@ -6,15 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>wasm-usage-guide</title>
   <meta name="author" content="dtysky">
-  <!-- <script type="text/javascript" src="/wasm-usage-guide.js"></script> -->
-  <script>
-    // var add = Module.cwrap('add', 'number', ['number', 'number']);
-    // var data = new Uint8ClampedArray(512 * 512);
-    // data.fill(0);
-    // var s = performance.now();
-    // colorInvert(data);
-    // console.log(performance.now() - s);
-  </script>
+  <style>
+    body {
+      background: rgba(100, 100, 100, .6);
+    }
+    button {
+      width: 400px;
+      height: 180px;
+      border: none;
+      outline: none;
+      background: rgba(200, 0, 200, .7);
+      margin: 24px;
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 <div id="container">

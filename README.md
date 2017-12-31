@@ -144,7 +144,7 @@ const WasmModule = {locateFile: (url: string) => `/cpp-es/${url}`};
 window.getCurrentWasmModule()(WasmModule);
 ```
 
-Just imp the member method `locateFile` and all will be done.
+Just implement the member method `locateFile` and all will be done.
 
 #### Side module
 
@@ -176,13 +176,56 @@ All will be done after a moment, then you could load it like in c++, use your ru
 
 >Note: I don't find the way to pass options from rustc to emcc, so you should concat pre.js post.js and yourCode.hs by yourself.
 
+## Pass array between js and wasm
+
+Pass a number between js and wasm is easy, but how can we pass a js array(like Int32Array, Uint8Array...) to wasm? If you use emscripten, it implement two methods `_malloc` and `_free` to manage memories. Following code show us how to use them and other methods to pass a array from js to wasm:
+
+```cpp
+// test.cc
+#include<stdint.h>
+#include <stdio.h>
+
+extern "C" {
+
+uint8_t* colorInvert(uint8_t* data, uint32_t size) {
+    int max = 255;
+    int i;
+    for (i = 0; i < size; i += 4) {
+        data[i] = max - data[i];
+        data[i + 1] = max - data[i + 1];
+        data[i + 2] = max - data[i + 2];
+        data[i + 3] = max - data[i + 3];
+    }
+    return data;
+}
+
+}
+```
+
+```ts
+const wasmColorInvert = Module.cwrap('colorInvert', 'number', ['number']);
+const data = (new Uint8Array(128)).fill(100);
+const nByte = 1;
+
+// malloc, get pointer
+const ptr = Module._malloc(data.length * nByte);
+// copy data from js array to heap
+Module.HEAPU8.set(data, ptr / nByte);
+// run method and get pointer
+const resPtr = wasmColorInvert(ptr, data.length / nByte);
+const pos = resPtr / nByte;
+// copy data from heap to js array
+const resData = Module.HEAPU8.subarray(pos, pos + data.length);
+// free
+Module._free(ptr);
+Module._free(resPtr);
+
+// [155, 155, ......]
+console.log(resData);
+```
+
 ## With Webpack
 
-### TypeScript
+Actually, using `fetch` to request wasm file and load it is not necessary, we can read a wasm file as a binary file and put it into our js file in packaging phase.  
 
-### C++
-
-### Rust
-
-## Pass array from js to wasm
-
+Yeah, you get it - with the help of webpack loaders, we can do this. There are many loaders such as **wasm-loader**, **rust-wasm-loader**...You can also write your own one, it's very easy !

@@ -23,7 +23,7 @@ const load = (url: string, importsObj: any = {}, path: string = ''): Promise<any
 const Main = () => (
   <React.Fragment>
     <button onClick={() => load('/ts/test.wasm')}>TypeScript</button>
-    <button onClick={() => load('/cpp-es/test.wasm')}>C++</button>
+    <button onClick={() => load('/cpp/test.wasm')}>C++</button>
     <button onClick={() => load('/rust/test.wasm')}>Rust</button>
     <button
       onClick={() => load('/cpp-es/test.js', {}, '/cpp-es')
@@ -33,21 +33,22 @@ const Main = () => (
           exportsObj.uint8ArrayAdd = module._uint8ArrayAdd;
           console.log(module, exportsObj);
 
-          const array1 = (new Uint8ClampedArray(100)).fill(10);
-          const array2 = (new Uint8ClampedArray(100)).fill(20);
+          const array = (new Uint8ClampedArray(100)).fill(10);
           const nByte = 1;
     
-          const ptr1 = module._malloc(array1.length * nByte);
-          const ptr2 = module._malloc(array2.length * nByte);
-          module.HEAPU8.set(array1, ptr1 / nByte);
-          module.HEAPU8.set(array2, ptr2 / nByte);
-          const resPtr = exportsObj.uint8ArrayAdd(ptr1, ptr2, array1.length / nByte);
-          const pos = resPtr / nByte;
-          const resData = module.HEAPU8.subarray(pos, pos + array1.length);
-          module._free(ptr1);
-          module._free(ptr2);
-          module._free(resPtr);
-          console.log(resData);
+          setTimeout(
+            () => {
+              const ptr1 = module._malloc(array.length * nByte);
+              module.HEAPU8.set(array, ptr1 / nByte);
+              const resPtr = exportsObj.uint8ArrayAdd(ptr1, 40, array.length / nByte);
+              const pos = resPtr / nByte;
+              const resData = module.HEAPU8.subarray(pos, pos + array.length);
+              module._free(ptr1);
+              module._free(resPtr);
+              console.log(resData);
+            },
+            1000
+          )
         })
       }
     >

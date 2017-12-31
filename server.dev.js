@@ -33,6 +33,13 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
+app.use((req, res, next) => {
+  if (['.wasm'].includes(path.extname(req.url))) {
+      res.setHeader('mime-type', 'application/wasm');
+  }
+  return next();
+});
+
 app.use('/',
   express.static(`${__dirname}/src`)
 );
