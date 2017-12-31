@@ -1,6 +1,0 @@
-[package]
-name = "wasm-usage-guide"
-version = "0.1.0"
-authors = ["DaiTianyu <dtysky@outlook.com>"]
-
-[dependencies]
