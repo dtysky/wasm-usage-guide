@@ -3,12 +3,11 @@
 	.globl	add                     # -- Begin function add
 	.type	add,@function
 add:                                    # @add
-	.param  	i32, i32, i32
+	.param  	i32, i32
 	.result 	i32
 # %bb.0:                                # %start
 	i32.add 	$push0=, $1, $0
-	i32.add 	$push1=, $pop0, $2
-                                        # fallthrough-return: $pop1
+                                        # fallthrough-return: $pop0
 	.endfunc
 .Lfunc_end0:
 	.size	add, .Lfunc_end0-add

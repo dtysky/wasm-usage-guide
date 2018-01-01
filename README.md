@@ -87,7 +87,20 @@ s2wasm yourCode.s >yourCode.wast
 wasm-as yourCode.wast >yourCode.wasm
 ```
 
-Then, we can use `loadWasm` to load this file.
+Then, we can use `loadWasm` to load this file.  
+
+Now, rustc supports another method to generate pure wasm file, please see here for resolution: [Rust for the Web](https://www.hellorust.com/setup/wasm-target/):  
+
+```bash
+rustc --target wasm32-unknown-unknown yourCode.rs -o yourCode.wasm
+```
+
+For reducing the size of file, your need to install **wasm-gc**:  
+
+```bash
+cargo install --git https://github.com/alexcrichton/wasm-gc
+wasm-gc yourCode.wasm small-yourCode.wasm
+```
 
 ## With Emscripten
 
@@ -172,9 +185,10 @@ Then, write your rust file like **src/rust-es.test.rs**(do not forget `main` fun
 rustc --target wasm32-unknown-emscripten yourCode.rs -o yourCode.js
 ```
 
-All will be done after a moment, then you could load it like in c++, use your rust function like `module._add`.
+All will be done after a moment, then you could load it like in c++, use your rust function like `module._add`.  
 
->Note: I don't find the way to pass options from rustc to emcc, so you should concat pre.js post.js and yourCode.hs by yourself.
+>Note: I don't find the way to pass options from rustc to emcc, so you should concat pre.js post.js and yourCode.js by yourself.
+
 
 ## Pass array between js and wasm
 
