@@ -5,7 +5,7 @@ Guides for generating and using wasm with different language(TypeScript, c++ and
 
 In current time, wasm(WebAssembly has been published in major broswers), And I find there are three languages could be compiled to it, they are **TypeScript**, **C++** and **Rust**. After some trials I make a summary that hope for helping all coders who want to use it (^ o ^) !  
 
-In this projects, you will know how to compile different languages to wasm and how to use them in your projects, like **load**, **call**, **wrap** and **pass array from js to wasm**. 
+In this projects, you will know how to compile different languages to wasm and how to use them in your projects, like **load**, **share methods** and **share memories**. 
 
 ## Test
 
@@ -189,10 +189,30 @@ All will be done after a moment, then you could load it like in c++, use your ru
 
 >Note: I don't find the way to pass options from rustc to emcc, so you should concat pre.js post.js and yourCode.js by yourself.
 
+## Share methods from js to wasm
 
-## Pass array between js and wasm
+In some scenes, you may want to use some js methods like `console.log` in your wasm file:  
 
-Pass a number between js and wasm is easy, but how can we pass a js array(like Int32Array, Uint8Array...) to wasm? If you use emscripten, it implement two methods `_malloc` and `_free` to manage memories. Following code show us how to use them and other methods to pass a array from js to wasm:
+```c++
+void jsLog(int num);
+int main {
+  jsLog(1);
+}
+```
+
+For doing this, we just need to create an `importsObject` when instantiating a wasm module:  
+
+```ts
+WebAssembly.instantiate(buf, {env: {jsLog: console.log}});
+```
+
+## Share memories
+
+Pass a number between js and wasm is not hard, but how can we pass a js array(like Int32Array, Uint8Array...) to wasm?
+
+### With Emscripten
+
+If you use emscripten, it implement two methods `_malloc` and `_free` to manage memories. Following code show us how to use them and other methods to pass a array from js to wasm:
 
 ```cpp
 // test.cc
@@ -217,6 +237,7 @@ uint8_t* colorInvert(uint8_t* data, uint32_t size) {
 ```
 
 ```ts
+// index.ts
 const wasmColorInvert = Module.cwrap('colorInvert', 'number', ['number']);
 const data = (new Uint8Array(128)).fill(100);
 const nByte = 1;
@@ -237,6 +258,10 @@ Module._free(resPtr);
 // [155, 155, ......]
 console.log(resData);
 ```
+
+### Without Emscripten
+
+If your do not want to use emcc, please check [WebAssembly.Memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory) and [wasm-intro](https://github.com/guybedford/wasm-intro) to get more information.  
 
 ## With Webpack
 
