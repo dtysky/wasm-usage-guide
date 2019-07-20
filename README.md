@@ -1,6 +1,10 @@
 # wasm-usage-guide
 Guides for generating and using wasm with different language(TypeScript, c++ and rust).
 
+## Note
+
+In current time, a project that show the best practice of webassembly with rust toolchain is here: [https://github.com/dtysky](https://github.com/dtysky).
+
 ## Overview
 
 In current time, wasm(WebAssembly has been published in major broswers), And I find there are three languages could be compiled to it, they are **TypeScript**, **C++** and **Rust**. After some trials I make a summary that hope for helping all coders who want to use it (^ o ^) !  
