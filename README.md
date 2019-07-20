@@ -3,7 +3,7 @@ Guides for generating and using wasm with different language(TypeScript, c++ and
 
 ## Note
 
-In current time, a project that show the best practice of webassembly with rust toolchain is here: [https://github.com/dtysky](https://github.com/dtysky).
+In current time, a project that show the best practice of webassembly with rust toolchain is here: [https://github.com/dtysky/gl-matrix-wasm](https://github.com/dtysky/gl-matrix-wasm).
 
 ## Overview
 
